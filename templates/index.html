@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ENN-talentMap</title>
+    <link rel="shortcut icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="pg-header">
+    {{ msg_err }}
+</div>
+<div class="pg-body left">
+</div>
+
+<div id="loading" class="loading hide">
+    <img src="/static/images/loading.gif">
+</div>
+
+<script src="/static/plugins/jquery-3.4.1.min.js"></script>
+<script src="/static/plugins/jquery.cookie.js"></script>
+<script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script>
+    function toDisplayLoading() {
+        $('#loading').removeClass('hide');
+    }
+
+    function toRemoveLoading() {
+        $('#loading').addClass('hide');
+    }
+</script>
+</body>
+</html>

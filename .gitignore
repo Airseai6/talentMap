@@ -1,0 +1,30 @@
+*.spec
+*.pyc
+*.svg
+*.exe
+
+# pyinstaller-F & pycharm
+__pycache__
+build
+dist
+.idea
+
+# vscode
+.vscode
+
+# bat文件，用于启动服务
+*.bat
+
+# Other object files
+*.dat
+# *.xlsx
+# *.docx
+# *.csv
+# *.json
+
+*.bmp
+# *.png
+# *.jpg
+# *.gif
+
+
