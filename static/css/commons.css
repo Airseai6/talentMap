@@ -39,8 +39,8 @@ body{
 .pg-header .logo{
     color: white;
     font-size: 18px;
-    width:220px;
     text-align: center;
+    /* width:220px; */
     /* border-right: 2px solid rgba(73, 126, 90, 0.39); */
 }
 

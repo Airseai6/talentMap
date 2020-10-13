@@ -54,6 +54,9 @@
             "name": "United States",
             "value": [1, 0.18018018018018017, "United States"]
         }, {
+            "name": "河北",
+            "value": [1, 0.18018018018018017, "河北"]
+        }, {
             "name": "Afghanistan",
             "value": [0, 0.0, "Afghanistan"]
         } ]
@@ -65,7 +68,7 @@
             timeline: {
                 axisType: 'category',
                 orient: 'vertical',
-                autoPlay: true,
+                autoPlay: false,
                 inverse: true,
                 playInterval: 1000,
                 left: null,
@@ -113,8 +116,8 @@
             },
             backgroundColor: '#404a59',
             title: {
-                text: '新冠病毒全球确诊病例变化情况',
-                subtext: '以一周为周期',
+                text: '聚变人才人员分布情况',
+                subtext: '仅为单方收集数据',
                 left: 'center',
                 top: 'top',
                 textStyle: {
@@ -124,13 +127,13 @@
             },
             tooltip: {
                 formatter: function(params) {
-                    if ('value' in params.data) {
+                    if (typeof(params.data)=='object' && 'value' in params.data) {
                         return params.data.value[2] + ': ' + params.data.value[0];
                     }
                 }
             },
             grid: {
-                left: '8%',
+                left: '12%',
                 right: '45%',
                 top: '70%',
                 bottom: 20
@@ -141,9 +144,10 @@
                     id: 'map',
                     type: 'map',
                     mapType: 'world',
+                    // mapType: 'china',
                     top: '10%',
-                    bottom: '25%',
-                    left: 10,
+                    bottom: '20%',
+                    left: '12%',
                     itemStyle: {
                         normal: {
                             areaColor: '#323c48',
@@ -178,7 +182,7 @@
                     id: 'pie',
                     type: 'pie',
                     radius: ['8%', '20%'],
-                    center: ['75%', '85%'],
+                    center: ['85%', '85%'],
                     roseType: 'radius',
                     tooltip: {
                         formatter: '{b} {d}%'
@@ -212,23 +216,21 @@
     
     for (var i = 0; i < data.length; i++) {
         //计算其余国家确诊人数
-        var restPercent = 100;
-        var restValue = 0;
-        data[i].data.forEach(function(ele) {
-            restPercent = restPercent - ele.value[1];
-        });
-        restValue = data[i].data[0].value[0] * (restPercent / data[i].data[0].value[1]);
-        console.log(restPercent);
-        console.log(restValue);
+        // var restPercent = 100;
+        // var restValue = 0;
+        // data[i].data.forEach(function(ele) {
+        //     restPercent = restPercent - ele.value[1];
+        // });
+        // restValue = data[i].data[0].value[0] * (restPercent / data[i].data[0].value[1]);
+        // console.log(restPercent);
+        // console.log(restValue);
         option.options.push({
             visualMap: [{
                 dimension: 0,
-                left: 10,
-                itemWidth: 12,
+                left: '1%',
+                itemWidth: '12%',
                 // min: data[i].data[29].value[0],
                 // max: data[i].data[0].value[0],
-                // min: 0,
-                // max: 100,
                 text: ['High', 'Low'],
                 textStyle: {
                     color: '#ddd'
@@ -247,14 +249,14 @@
             yAxis: {
                 type: 'category',
                 axisLabel: {
-                    show:false,
+                    show:true,
                     textStyle: {
                         color: '#ddd'
                     }
                 },
                 data: data[i].data.map(function(ele) {
                     return ele.value[2]
-                }).reverse()
+                })//.reverse()
             },
             series: [{
                     id: 'map',
@@ -265,9 +267,7 @@
                     id: 'bar',
                     data: data[i].data.map(function(ele) {
                         return ele.value[0]
-                    }) //.sort(function(a, b) {
-                        // return a > b
-                    // })
+                    })
                 },
                 // 显示饼图
                 {
@@ -279,7 +279,7 @@
                         }
                     }).concat({
                         name: '其他国家',
-                        value: restValue
+                        value: 10
                     }),
                 }
             ]
