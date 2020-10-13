@@ -35,30 +35,66 @@
     var myChart = echarts.init(document.getElementById("displayBox"));
 
     var data = [{
+        "type": '整体数据',
         "data": [{
             "name": "China",
-            "value": [548, 98.73873873873873, "China"]
+            "value": [548, "China"]
         }, {
             "name": "Japan",
-            "value": [2, 0.36036036036036034, "Japan"]
+            "value": [2, "Japan"]
         }, {
             "name": "Thailand",
-            "value": [2, 0.36036036036036034, "Thailand"]
+            "value": [2, "Thailand"]
         }, {
-            "name": "Korea, South",
-            "value": [1, 0.18018018018018017, "Korea, South"]
-        }, {
-            "name": "Taiwan*",
-            "value": [1, 0.18018018018018017, "Taiwan*"]
+            "name": "Korea",
+            "value": [1, "Korea"]
         }, {
             "name": "United States",
-            "value": [1, 0.18018018018018017, "United States"]
+            "value": [1, "United States"]
         }, {
             "name": "河北",
-            "value": [1, 0.18018018018018017, "河北"]
+            "value": [1, "河北"]
         }, {
             "name": "Afghanistan",
-            "value": [0, 0.0, "Afghanistan"]
+            "value": [0, "Afghanistan"]
+        } ]
+    },
+    {
+        "type": '行业专家',
+        "data": [{
+            "name": "China",
+            "value": [52, "China"]
+        }, {
+            "name": "Japan",
+            "value": [24, "Japan"]
+        }, {
+            "name": "Thailand",
+            "value": [21, "Thailand"]
+        }, {
+            "name": "Korea",
+            "value": [1, "Korea"]
+        }, {
+            "name": "United States",
+            "value": [1, "United States"]
+        } ]
+    },
+    {
+        "type": '理论模拟',
+        "data": [{
+            "name": "China",
+            "value": [333, "China"]
+        }, {
+            "name": "Japan",
+            "value": [24, "Japan"]
+        }, {
+            "name": "Thailand",
+            "value": [21, "Thailand"]
+        }, {
+            "name": "Korea",
+            "value": [1, "Korea"]
+        }, {
+            "name": "United States",
+            "value": [222, "United States"]
         } ]
     }]
     var option = {
@@ -69,8 +105,9 @@
                 axisType: 'category',
                 orient: 'vertical',
                 autoPlay: false,
+                currentIndex: 2,
                 inverse: true,
-                playInterval: 1000,
+                playInterval: 2000,
                 left: null,
                 right: 5,
                 top: 20,
@@ -111,12 +148,12 @@
                     }
                 },
                 data: data.map(function(ele) {
-                    return ele.time
+                    return ele.type
                 })
             },
             backgroundColor: '#404a59',
             title: {
-                text: '聚变人才人员分布情况',
+                // text: '聚变人才人员分布情况',
                 subtext: '仅为单方收集数据',
                 left: 'center',
                 top: 'top',
@@ -128,7 +165,7 @@
             tooltip: {
                 formatter: function(params) {
                     if (typeof(params.data)=='object' && 'value' in params.data) {
-                        return params.data.value[2] + ': ' + params.data.value[0];
+                        return params.data.value[1] + ': ' + params.data.value[0];
                     }
                 }
             },
@@ -144,6 +181,7 @@
                     id: 'map',
                     type: 'map',
                     mapType: 'world',
+                    roam: true,//缩放和平移
                     // mapType: 'china',
                     top: '10%',
                     bottom: '20%',
@@ -215,16 +253,8 @@
     }
     
     for (var i = 0; i < data.length; i++) {
-        //计算其余国家确诊人数
-        // var restPercent = 100;
-        // var restValue = 0;
-        // data[i].data.forEach(function(ele) {
-        //     restPercent = restPercent - ele.value[1];
-        // });
-        // restValue = data[i].data[0].value[0] * (restPercent / data[i].data[0].value[1]);
-        // console.log(restPercent);
-        // console.log(restValue);
         option.options.push({
+            title: {text: '聚变人才人员分布情况-' + data[i].type},
             visualMap: [{
                 dimension: 0,
                 left: '1%',
@@ -255,7 +285,7 @@
                     }
                 },
                 data: data[i].data.map(function(ele) {
-                    return ele.value[2]
+                    return ele.value[1]
                 })//.reverse()
             },
             series: [{
@@ -274,7 +304,7 @@
                     id: 'pie',
                     data: data[i].data.map(function(ele) {
                         return {
-                            name: ele.value[2],
+                            name: ele.value[1],
                             value: ele.value
                         }
                     }).concat({
@@ -287,6 +317,14 @@
     }
 	
 	myChart.setOption(option);
+	myChart.on('click', function (params) {
+        if (typeof(params.data)=="object"){
+            console.log(params.data.name);
+            if(params.data.name=='China'){
+                console.log('触发地图下钻');
+            }
+        }
+    });
 
 </script>
 {% endblock %}
