@@ -1,34 +1,292 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ENN-talentMap</title>
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/plugins/font-awesome-4.7.0/css/font-awesome.min.css">
-</head>
-<body>
-<div class="pg-header">
-    {{ msg_err }}
-</div>
-<div class="pg-body left">
-</div>
+{% extends 'layout.html' %}
 
-<div id="loading" class="loading hide">
-    <img src="/static/images/loading.gif">
-</div>
 
-<script src="/static/plugins/jquery-3.4.1.min.js"></script>
-<script src="/static/plugins/jquery.cookie.js"></script>
-<script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+{% block css %}
+<style>
+    #topSetBox {
+        height: 4%;
+        background-color:#404a59;
+    }
+
+    #displayBox {
+        height: 96%;
+        width: 100%x;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+    <div id="topSetBox">
+        <button id="btnEditStep" type="button" class="btn btn-primary btn-xs">数据更新</button>
+        <button id="btnEditStep" type="button" class="btn btn-primary btn-xs"><i class="fa fa-reply" aria-hidden="true"></i> 返回全球预览</button>
+    </div>
+
+    <div id="displayBox">
+
+    </div>
+{% endblock %}
+
+{% block js %}
+<script src="/static/plugins/echarts-4.6.0/echarts.min.js"></script>
+<script src="/static/plugins/map/china.js"></script>
+<script src="/static/plugins/map/world.js"></script>
 <script>
-    function toDisplayLoading() {
-        $('#loading').removeClass('hide');
-    }
+    var myChart = echarts.init(document.getElementById("displayBox"));
 
-    function toRemoveLoading() {
-        $('#loading').addClass('hide');
+    var data = [{
+        "data": [{
+            "name": "China",
+            "value": [548, 98.73873873873873, "China"]
+        }, {
+            "name": "Japan",
+            "value": [2, 0.36036036036036034, "Japan"]
+        }, {
+            "name": "Thailand",
+            "value": [2, 0.36036036036036034, "Thailand"]
+        }, {
+            "name": "Korea, South",
+            "value": [1, 0.18018018018018017, "Korea, South"]
+        }, {
+            "name": "Taiwan*",
+            "value": [1, 0.18018018018018017, "Taiwan*"]
+        }, {
+            "name": "United States",
+            "value": [1, 0.18018018018018017, "United States"]
+        }, {
+            "name": "Afghanistan",
+            "value": [0, 0.0, "Afghanistan"]
+        } ]
+    }]
+    var option = {
+        baseOption: {
+            animationDurationUpdate: 1000,
+            animationEasingUpdate: 'quinticInOut',
+            timeline: {
+                axisType: 'category',
+                orient: 'vertical',
+                autoPlay: true,
+                inverse: true,
+                playInterval: 1000,
+                left: null,
+                right: 5,
+                top: 20,
+                bottom: 20,
+                width: 46,
+                height: null,
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#ddd'
+                        }
+                    },
+                    emphasis: {
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                symbol: 'none',
+                lineStyle: {
+                    color: '#555'
+                },
+                checkpointStyle: {
+                    color: '#bbb',
+                    borderColor: '#777',
+                    borderWidth: 1
+                },
+                controlStyle: {
+                    showNextBtn: false,
+                    showPrevBtn: false,
+                    normal: {
+                        color: '#666',
+                        borderColor: '#666'
+                    },
+                    emphasis: {
+                        color: '#aaa',
+                        borderColor: '#aaa'
+                    }
+                },
+                data: data.map(function(ele) {
+                    return ele.time
+                })
+            },
+            backgroundColor: '#404a59',
+            title: {
+                text: '新冠病毒全球确诊病例变化情况',
+                subtext: '以一周为周期',
+                left: 'center',
+                top: 'top',
+                textStyle: {
+                    fontSize: 25,
+                    color: 'rgba(255,255,255, 0.9)'
+                }
+            },
+            tooltip: {
+                formatter: function(params) {
+                    if ('value' in params.data) {
+                        return params.data.value[2] + ': ' + params.data.value[0];
+                    }
+                }
+            },
+            grid: {
+                left: '8%',
+                right: '45%',
+                top: '70%',
+                bottom: 20
+            },
+            xAxis: {},
+            yAxis: {},
+            series: [{
+                    id: 'map',
+                    type: 'map',
+                    mapType: 'world',
+                    top: '10%',
+                    bottom: '25%',
+                    left: 10,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#323c48',
+                            borderColor: '#404a59'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true
+                            },
+                            areaColor: 'rgba(255,255,255, 0.5)'
+                        }
+                    },
+                    data: []
+                }, {
+                    id: 'bar',
+                    type: 'bar',
+                    tooltip: {
+                        show: true
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right',
+                            textStyle: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    data: []
+                },
+                {
+                    id: 'pie',
+                    type: 'pie',
+                    radius: ['8%', '20%'],
+                    center: ['75%', '85%'],
+                    roseType: 'radius',
+                    tooltip: {
+                        formatter: '{b} {d}%'
+                    },
+                    data: [],
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            lineStyle: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderColor: 'rgba(0,0,0,0.3)',
+                            borderSize: 1
+                        }
+                    }
+                }
+            ]
+        },
+        options: []
     }
+    
+    for (var i = 0; i < data.length; i++) {
+        //计算其余国家确诊人数
+        var restPercent = 100;
+        var restValue = 0;
+        data[i].data.forEach(function(ele) {
+            restPercent = restPercent - ele.value[1];
+        });
+        restValue = data[i].data[0].value[0] * (restPercent / data[i].data[0].value[1]);
+        console.log(restPercent);
+        console.log(restValue);
+        option.options.push({
+            visualMap: [{
+                dimension: 0,
+                left: 10,
+                itemWidth: 12,
+                // min: data[i].data[29].value[0],
+                // max: data[i].data[0].value[0],
+                // min: 0,
+                // max: 100,
+                text: ['High', 'Low'],
+                textStyle: {
+                    color: '#ddd'
+                },
+                inRange: {
+                    color: ['lightskyblue', 'yellow', 'orangered', 'red']
+                }
+            }],
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.1],
+                axisLabel: {
+                    show: false,
+                }
+            },
+            yAxis: {
+                type: 'category',
+                axisLabel: {
+                    show:false,
+                    textStyle: {
+                        color: '#ddd'
+                    }
+                },
+                data: data[i].data.map(function(ele) {
+                    return ele.value[2]
+                }).reverse()
+            },
+            series: [{
+                    id: 'map',
+                    data: data[i].data
+                },
+                // 显示左下角的条形图
+                {
+                    id: 'bar',
+                    data: data[i].data.map(function(ele) {
+                        return ele.value[0]
+                    }) //.sort(function(a, b) {
+                        // return a > b
+                    // })
+                },
+                // 显示饼图
+                {
+                    id: 'pie',
+                    data: data[i].data.map(function(ele) {
+                        return {
+                            name: ele.value[2],
+                            value: ele.value
+                        }
+                    }).concat({
+                        name: '其他国家',
+                        value: restValue
+                    }),
+                }
+            ]
+        })
+    }
+	
+	myChart.setOption(option);
+
 </script>
-</body>
-</html>
+{% endblock %}
