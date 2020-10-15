@@ -16,6 +16,30 @@
 {% endblock %}
 
 
+{% block menus %}
+<div class="div1">
+    <a href="#"><i class="fa fa-users" aria-hidden="true"></i> 聚变人才</a>
+</div>
+<div class="div2">
+    <ul>
+        <li>行业专家</li>
+        <li>其他专家</li>
+        <li>聚变材料</li>
+        <li>理论模拟</li>
+    </ul>
+</div>
+<div class="div1">
+    <a href="#"><i class="fa fa-users" aria-hidden="true"></i> 地热人才</a>
+</div>
+<div class="div2">
+    <ul>
+        <li>行业专家</li>
+        <li>其他专家</li>
+    </ul>
+</div>
+{% endblock %}
+
+
 {% block content %}
     <div id="topSetBox">
         <button id="btnEditStep" type="button" class="btn btn-primary btn-xs">数据更新</button>
@@ -31,20 +55,23 @@
 <script src="/static/plugins/echarts-4.6.0/echarts.min.js"></script>
 <script src="/static/plugins/map/china.js"></script>
 <script src="/static/plugins/map/world.js"></script>
+<script src="/static/js/FormCharts.js"></script>
 <script>
+    var mapType = 'world';
+    var currentIndex = 0;
     var myChart = echarts.init(document.getElementById("displayBox"));
 
     var data = [{
         "type": '整体数据',
         "data": [{
             "name": "China",
-            "value": [548, "China"]
+            "value": [4, "China"]
         }, {
             "name": "Japan",
-            "value": [2, "Japan"]
+            "value": [2, "日本"]
         }, {
-            "name": "Thailand",
-            "value": [2, "Thailand"]
+            "name": "Costa Rica",
+            "value": [2, "哥斯达黎加"]
         }, {
             "name": "Korea",
             "value": [1, "Korea"]
@@ -97,231 +124,16 @@
             "value": [222, "United States"]
         } ]
     }]
-    var option = {
-        baseOption: {
-            animationDurationUpdate: 1000,
-            animationEasingUpdate: 'quinticInOut',
-            timeline: {
-                axisType: 'category',
-                orient: 'vertical',
-                autoPlay: false,
-                currentIndex: 2,
-                inverse: true,
-                playInterval: 2000,
-                left: null,
-                right: 5,
-                top: 20,
-                bottom: 20,
-                width: 46,
-                height: null,
-                label: {
-                    normal: {
-                        textStyle: {
-                            color: '#ddd'
-                        }
-                    },
-                    emphasis: {
-                        textStyle: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                symbol: 'none',
-                lineStyle: {
-                    color: '#555'
-                },
-                checkpointStyle: {
-                    color: '#bbb',
-                    borderColor: '#777',
-                    borderWidth: 1
-                },
-                controlStyle: {
-                    showNextBtn: false,
-                    showPrevBtn: false,
-                    normal: {
-                        color: '#666',
-                        borderColor: '#666'
-                    },
-                    emphasis: {
-                        color: '#aaa',
-                        borderColor: '#aaa'
-                    }
-                },
-                data: data.map(function(ele) {
-                    return ele.type
-                })
-            },
-            backgroundColor: '#404a59',
-            title: {
-                // text: '聚变人才人员分布情况',
-                subtext: '仅为单方收集数据',
-                left: 'center',
-                top: 'top',
-                textStyle: {
-                    fontSize: 25,
-                    color: 'rgba(255,255,255, 0.9)'
-                }
-            },
-            tooltip: {
-                formatter: function(params) {
-                    if (typeof(params.data)=='object' && 'value' in params.data) {
-                        return params.data.value[1] + ': ' + params.data.value[0];
-                    }
-                }
-            },
-            grid: {
-                left: '12%',
-                right: '45%',
-                top: '70%',
-                bottom: 20
-            },
-            xAxis: {},
-            yAxis: {},
-            series: [{
-                    id: 'map',
-                    type: 'map',
-                    mapType: 'world',
-                    roam: true,//缩放和平移
-                    // mapType: 'china',
-                    top: '10%',
-                    bottom: '20%',
-                    left: '12%',
-                    itemStyle: {
-                        normal: {
-                            areaColor: '#323c48',
-                            borderColor: '#404a59'
-                        },
-                        emphasis: {
-                            label: {
-                                show: true
-                            },
-                            areaColor: 'rgba(255,255,255, 0.5)'
-                        }
-                    },
-                    data: []
-                }, {
-                    id: 'bar',
-                    type: 'bar',
-                    tooltip: {
-                        show: true
-                    },
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'right',
-                            textStyle: {
-                                color: '#ddd'
-                            }
-                        }
-                    },
-                    data: []
-                },
-                {
-                    id: 'pie',
-                    type: 'pie',
-                    radius: ['8%', '20%'],
-                    center: ['85%', '85%'],
-                    roseType: 'radius',
-                    tooltip: {
-                        formatter: '{b} {d}%'
-                    },
-                    data: [],
-                    label: {
-                        normal: {
-                            textStyle: {
-                                color: '#ddd'
-                            }
-                        }
-                    },
-                    labelLine: {
-                        normal: {
-                            lineStyle: {
-                                color: '#ddd'
-                            }
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            borderColor: 'rgba(0,0,0,0.3)',
-                            borderSize: 1
-                        }
-                    }
-                }
-            ]
-        },
-        options: []
-    }
-    
-    for (var i = 0; i < data.length; i++) {
-        option.options.push({
-            title: {text: '聚变人才人员分布情况-' + data[i].type},
-            visualMap: [{
-                dimension: 0,
-                left: '1%',
-                itemWidth: '12%',
-                // min: data[i].data[29].value[0],
-                // max: data[i].data[0].value[0],
-                text: ['High', 'Low'],
-                textStyle: {
-                    color: '#ddd'
-                },
-                inRange: {
-                    color: ['lightskyblue', 'yellow', 'orangered', 'red']
-                }
-            }],
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.1],
-                axisLabel: {
-                    show: false,
-                }
-            },
-            yAxis: {
-                type: 'category',
-                axisLabel: {
-                    show:true,
-                    textStyle: {
-                        color: '#ddd'
-                    }
-                },
-                data: data[i].data.map(function(ele) {
-                    return ele.value[1]
-                })//.reverse()
-            },
-            series: [{
-                    id: 'map',
-                    data: data[i].data
-                },
-                // 显示左下角的条形图
-                {
-                    id: 'bar',
-                    data: data[i].data.map(function(ele) {
-                        return ele.value[0]
-                    })
-                },
-                // 显示饼图
-                {
-                    id: 'pie',
-                    data: data[i].data.map(function(ele) {
-                        return {
-                            name: ele.value[1],
-                            value: ele.value
-                        }
-                    }).concat({
-                        name: '其他国家',
-                        value: 10
-                    }),
-                }
-            ]
-        })
-    }
-	
-	myChart.setOption(option);
+
+	var option = formMapOption(data, mapType, currentIndex);
+    myChartSetOption(option, myChart);
 	myChart.on('click', function (params) {
         if (typeof(params.data)=="object"){
             console.log(params.data.name);
             if(params.data.name=='China'){
-                console.log('触发地图下钻');
+                mapType = 'china';
+                option = formMapOption(data, mapType, currentIndex);
+                myChartSetOption(option, myChart);
             }
         }
     });

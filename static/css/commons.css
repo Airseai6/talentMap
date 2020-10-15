@@ -86,6 +86,15 @@ body{
     border-bottom: 1px solid #ffffff;
 }
 
+.div2{
+    display: none;cursor:pointer; font-size:13px;
+}
+.div2 ul{
+    margin:0;padding:0;
+}
+.div2 li{
+    height:30px; line-height:30px; list-style:none; border-bottom:#ccc 1px dotted; text-align:center;
+}
 
 .content{
     position: absolute;

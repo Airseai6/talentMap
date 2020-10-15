@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/plugins/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/css/commons.css">
-    <style>
-        .div2{display: none;cursor:pointer; font-size:13px;}
-        .div2 ul{margin:0;padding:0;}
-        .div2 li{ height:30px; line-height:30px; list-style:none; border-bottom:#ccc 1px dotted; text-align:center;}
-    </style>
     {% block css %}{% endblock %}
 </head>
 <body>
@@ -25,26 +20,7 @@
 
 <div class="pg-body left">
     <div class="menus">
-        <div class="div1">
-            <a href="#"><i class="fa fa-users" aria-hidden="true"></i> 聚变人才</a>
-        </div>
-        <div class="div2">
-            <ul>
-                <li>行业专家</li>
-                <li>其他专家</li>
-                <li>聚变材料</li>
-                <li>理论模拟</li>
-            </ul>
-        </div>
-        <div class="div1">
-            <a href="#"><i class="fa fa-users" aria-hidden="true"></i> 地热人才</a>
-        </div>
-        <div class="div2">
-            <ul>
-                <li>行业专家</li>
-                <li>其他专家</li>
-            </ul>
-        </div>
+        {% block menus %}{% endblock %}
     </div>
 </div>
 
