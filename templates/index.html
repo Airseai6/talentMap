@@ -17,33 +17,14 @@
 
 
 {% block menus %}
-<div class="div1">
-    <a href="#"><i class="fa fa-users" aria-hidden="true"></i> 聚变人才</a>
-</div>
-<div class="div2">
-    <ul>
-        <li>行业专家</li>
-        <li>其他专家</li>
-        <li>聚变材料</li>
-        <li>理论模拟</li>
-    </ul>
-</div>
-<div class="div1">
-    <a href="#"><i class="fa fa-users" aria-hidden="true"></i> 地热人才</a>
-</div>
-<div class="div2">
-    <ul>
-        <li>行业专家</li>
-        <li>其他专家</li>
-    </ul>
-</div>
+<div id="group_menus"></div>
 {% endblock %}
 
 
 {% block content %}
     <div id="topSetBox">
-        <button id="btnEditStep" type="button" class="btn btn-primary btn-xs">数据更新</button>
-        <button id="btnEditStep" type="button" class="btn btn-primary btn-xs"><i class="fa fa-reply" aria-hidden="true"></i> 返回全球预览</button>
+        <button id="btnDataUpdate" type="button" class="btn btn-primary btn-xs">数据更新</button>
+        <button id="btnReturnGlobal" type="button" class="btn btn-primary btn-xs"><i class="fa fa-reply" aria-hidden="true"></i> 返回全球预览</button>
     </div>
 
     <div id="displayBox">
@@ -57,85 +38,62 @@
 <script src="/static/plugins/map/world.js"></script>
 <script src="/static/js/FormCharts.js"></script>
 <script>
-    var mapType = 'world';
-    var currentIndex = 0;
-    var myChart = echarts.init(document.getElementById("displayBox"));
-
-    var data = [{
-        "type": '整体数据',
-        "data": [{
-            "name": "China",
-            "value": [4, "China"]
-        }, {
-            "name": "Japan",
-            "value": [2, "日本"]
-        }, {
-            "name": "Costa Rica",
-            "value": [2, "哥斯达黎加"]
-        }, {
-            "name": "Korea",
-            "value": [1, "Korea"]
-        }, {
-            "name": "United States",
-            "value": [1, "United States"]
-        }, {
-            "name": "河北",
-            "value": [1, "河北"]
-        }, {
-            "name": "Afghanistan",
-            "value": [0, "Afghanistan"]
-        } ]
-    },
-    {
-        "type": '行业专家',
-        "data": [{
-            "name": "China",
-            "value": [52, "China"]
-        }, {
-            "name": "Japan",
-            "value": [24, "Japan"]
-        }, {
-            "name": "Thailand",
-            "value": [21, "Thailand"]
-        }, {
-            "name": "Korea",
-            "value": [1, "Korea"]
-        }, {
-            "name": "United States",
-            "value": [1, "United States"]
-        } ]
-    },
-    {
-        "type": '理论模拟',
-        "data": [{
-            "name": "China",
-            "value": [333, "China"]
-        }, {
-            "name": "Japan",
-            "value": [24, "Japan"]
-        }, {
-            "name": "Thailand",
-            "value": [21, "Thailand"]
-        }, {
-            "name": "Korea",
-            "value": [1, "Korea"]
-        }, {
-            "name": "United States",
-            "value": [222, "United States"]
-        } ]
-    }]
-
-	var option = formMapOption(data, mapType, currentIndex);
-    myChartSetOption(option, myChart);
-	myChart.on('click', function (params) {
-        if (typeof(params.data)=="object"){
-            console.log(params.data.name);
-            if(params.data.name=='China'){
-                mapType = 'china';
-                option = formMapOption(data, mapType, currentIndex);
-                myChartSetOption(option, myChart);
+    /* 以下为：JS方法中被调用的几个工具方法 */
+    function formMeuns(id, dataRet) {
+        var div = document.getElementById(id);
+        var content = '';
+        for (var i = 0; i < dataRet.groups.length; i++) {
+            content += '<div class="div1"><a href="#"><i class="fa fa-users" aria-hidden="true"></i> '+dataRet.groups[i]+'</a></div>';
+            content += '<div class="div2"><ul>';
+            for (var j = 0; j < dataRet.data[i].branchName.length; j++) {
+                content += '<li>'+ dataRet.data[i].branchName[j] +'</li>';
             }
+            content += '</ul></div>';
         }
+        div.innerHTML = content;
+    }
+
+    function setMyChart(myChart, dataRet) {
+        var data = [];
+        if (dataRet.setting.mapType == 'world') {
+            $("#btnReturnGlobal").hide();
+            data = dataRet.data[dataRet.setting.groupIndex].world;
+        } else {
+            $("#btnReturnGlobal").show();
+            data = dataRet.data[dataRet.setting.groupIndex].China;
+        }
+        var option = formMapOption(data, dataRet.setting.mapType, dataRet.setting.currentIndex);
+        myChartSetOption(option, myChart);
+    }
+
+    /* 以下为：初始化, dataRet.setting为图表设置项，全局变量可改动 */
+    var dataRet = {{ dataRet | safe }};
+    formMeuns('group_menus', dataRet);
+
+    // var mapType = 'world';
+    // var groupIndex = 0;
+    // var currentIndex = 0;
+    
+    var myChart = echarts.init(document.getElementById("displayBox"));
+    setMyChart(myChart, dataRet);
+    
+
+    $(function () {
+        myChart.on('click', function (params) {
+            if (typeof(params.data)=="object"){
+                // console.log(params.data.name);
+                if(params.data.name=='China'){
+                    dataRet.setting.mapType = 'china';
+                    setMyChart(myChart, dataRet);
+                }
+            }
+        });
+        
+        $('#btnReturnGlobal').click(function () {
+            // 返回全球预览按钮
+            dataRet.setting.mapType = 'world';
+            setMyChart(myChart, dataRet);
+        });
     });
 
 </script>

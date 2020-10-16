@@ -1,21 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse, redirect
+from django.urls import reverse
+from utils import tools, global_variable, caches_dm
+
+
+const = global_variable.const()
+db_caches = global_variable.caches()
+print('--------init app01 ok--------')
 
 
 def index(request):
-    if request.method == 'GET':
-        pass
-    else:
-        pass
-    msg_err = 'ok'
+    dataRet = caches_dm.getData(db_caches)
+    # {'groups': ['聚变人才'], 'data':[{'China': [{}...], 'branchName': ['行业专家'...], 'world': [{}...]},,,]}
+    dataRet['setting'] = {}
+    dataRet['setting']['mapType'] = 'world'
+    dataRet['setting']['groupIndex'] = 0
+    dataRet['setting']['currentIndex'] = 0
 
-    return render(request, 'index.html', {'msg_err': msg_err, })
+    return render(request, 'index.html', {'dataRet': dataRet, })
 
-
-def layout(request):
-    if request.method == 'GET':
-        pass
-    else:
-        pass
-    msg_err = 'ok'
-
-    return render(request, 'layout.html', {'msg_err': msg_err, })

@@ -11,8 +11,10 @@ class const():
     def __init__(self):
         # 原始excel文件位置
         self.excel_dir = os.path.join(settings.BASE_DIR, 'doc')
-        # excle文件列表
+        # excel文件列表
         self.excel_groups = ['人才资源库 (聚变).xlsx',]
+        # menus列表与excel对应
+        self.menus_groups = ['聚变人才',]
         # 中国地图的省份，对应echarts中的名称
         self.ChinaProvinces = ['北京','天津','上海','河北','山西','内蒙古','辽宁','吉林','黑龙江','江苏','浙江','安徽','福建','江西','山东','河南','湖北',
         '湖南','广东','广西','海南','四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆','重庆','台湾','香港','澳门',]
@@ -39,7 +41,7 @@ class const():
             '缅甸': 'Myanmar', '纳米比亚': 'Namibia', '瑙鲁': 'Nauru', '尼泊尔': 'Nepal', '荷兰': 'Netherlands', '新喀里多尼亚': 'New Caledonia', '新西兰': 'New Zealand', '尼加拉瓜': 'Nicaragua',
             '尼日尔': 'Niger', '尼日利亚': 'Nigeria', '纽埃': 'Niue', '诺福克岛': 'Norfolk Island', '挪威': 'Norway', '阿曼': 'Oman', '巴基斯坦': 'Pakistan', '帕劳': 'Palau', '巴勒斯坦': 'Palestine',
             '巴拿马': 'Panama', '巴布亚新几内亚': 'Papua New Guinea', '秘鲁': 'Peru', '菲律宾': 'Philippines', '皮特凯恩群岛': 'Pitcairn Islands', '波兰': 'Poland', '葡萄牙': 'Portugal',
-            '波多黎各': 'Puerto Rico', '卡塔尔': 'Qatar', '留尼汪岛': 'Reunion', '罗马尼亚': 'Romania', '卢旺达': 'Rwanda', '俄罗斯联邦': 'Russian Federation', '圣赫勒拿': 'Saint Helena',
+            '波多黎各': 'Puerto Rico', '卡塔尔': 'Qatar', '留尼汪岛': 'Reunion', '罗马尼亚': 'Romania', '卢旺达': 'Rwanda', '俄罗斯': 'Russia', '圣赫勒拿': 'Saint Helena',
             '圣基茨和尼维斯': 'Saint Kitts-Nevis', '圣卢西亚': 'Saint Lucia', '圣文森特和格林纳丁斯': 'Saint Vincent and the Grenadines', '萨尔瓦多': 'El Salvador', '萨摩亚': 'Samoa',
             '圣马力诺': 'San Marino', '圣多美和普林西比': 'Sao Tome and Principe', '沙特阿拉伯': 'Saudi Arabia', '塞内加尔': 'Senegal', '塞舌尔': 'Seychelles', '塞拉利昂': 'Sierra Leone',
             '新加坡': 'Singapore', '塞尔维亚': 'Serbia', '斯洛伐克': 'Slovakia', '斯洛文尼亚': 'Slovenia', '所罗门群岛': 'Solomon Islands', '索马里': 'Somalia', '南非': 'South Africa',

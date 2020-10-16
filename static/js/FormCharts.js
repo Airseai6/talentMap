@@ -173,6 +173,10 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
         var talentNum = [0,];   // 构建人数列表，为了获取最大最小值
         for (var j = 0; j < data[i].data.length; j++) {
             talentNum.push(data[i].data[j].value[0]);
+        };
+        var barLabelFontSize = 12;
+        if (data[i].data.length > 9) {
+            barLabelFontSize = 8;
         }
         option.options.push({
             title: {text: '聚变人才人员分布情况-' + data[i].type},
@@ -200,7 +204,10 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
             yAxis: {
                 type: 'category',
                 axisLabel: {
-                    show:true,
+                    show:true, // 柱状图左侧标签
+                    interval:0,
+                    fontSize: barLabelFontSize,
+                    // rotate:40,
                     textStyle: {
                         color: '#ddd'
                     }
@@ -217,7 +224,7 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
                 {
                     id: 'bar',
                     data: data[i].data.map(function(ele) {
-                        return ele.value[0]
+                        return ele.value[0];
                     })
                 },
                 // 显示饼图
@@ -228,10 +235,10 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
                             name: ele.value[1],
                             value: ele.value
                         }
-                    }).concat({
-                        name: '其他国家',
-                        value: 10
-                    }),
+                    })//.concat({
+                    //     name: '其他国家',
+                    //     value: 10
+                    // }),
                 }
             ]
         })

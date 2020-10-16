@@ -13,12 +13,16 @@ class excelReader:
     def getTrunk(self):
         """
         返回第一页总的数据, list
-        # [{'地区': '广东', '人数': 10}, {'地区': '福建', '人数': 2}, {'地区': '甘肃', '人数': 36}...]
+        [{'地区': '广东', '人数': 10}, {'地区': '福建', '人数': 2}, {'地区': '甘肃', '人数': 36}...]
+        最后一个是“合计”，去除，现在最后一个基本是“其他”
         """
-        return self.trunk_df.to_dict(orient='records')
+        return self.trunk_df.to_dict(orient='records')[:-1]
 
     def getBranch(self):
-        """ 返回第二页的分支数据，地区，单位，人数，dic """
+        """
+        返回第二页的分支数据，地区，单位，人数，dic
+        {'行业专家': [{'地区': '四川', '单位': '核工业西南物理研究院', '人数': 20},
+        """
         talents = {}
         i = 0
         for item in self.branch_df.columns:
@@ -29,4 +33,3 @@ class excelReader:
             i += 1
         return talents
 
-        
