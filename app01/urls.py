@@ -3,6 +3,6 @@ from app01 import views
 
 urlpatterns = [
     re_path(r'^map.html$', views.index, name='index'),
-    # path(r'logout/', views.logout, name='logout'),
+    path(r'updateData/', views.updateData, name='updateData'),
 
 ]

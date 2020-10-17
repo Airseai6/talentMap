@@ -57,15 +57,19 @@ def formData2Echarts(index):
                     TalentInChina += item['人数']
                     if item['地区'] in China_dic:
                         China_dic[item['地区']]['num'] += item['人数']
-                        China_dic[item['地区']]['unit'].append({item['单位']:item['人数']})
+                        # China_dic[item['地区']]['unit'].append({item['单位']:item['人数']})
+                        China_dic[item['地区']]['unit'][item['单位']] = item['人数']
                     else:
-                        China_dic[item['地区']] = {"num":item['人数'], "unit":[{item['单位']:item['人数']},]}
+                        # China_dic[item['地区']] = {"num":item['人数'], "unit":[{item['单位']:item['人数']},]}
+                        China_dic[item['地区']] = {"num":item['人数'], "unit":{item['单位']:item['人数']},}
                 else:
                     if item['地区'] in world_dic:
                         world_dic[item['地区']]['num'] += item['人数']
-                        world_dic[item['地区']]['unit'].append({item['单位']:item['人数']})
+                        # world_dic[item['地区']]['unit'].append({item['单位']:item['人数']})
+                        world_dic[item['地区']]['unit'][item['单位']] = item['人数']
                     else:
-                        world_dic[item['地区']] = {"num":item['人数'], "unit":[{item['单位']:item['人数']},]}
+                        # world_dic[item['地区']] = {"num":item['人数'], "unit":[{item['单位']:item['人数']},]}
+                        world_dic[item['地区']] = {"num":item['人数'], "unit":{item['单位']:item['人数']},}
             world_dic['China'] = {"num":TalentInChina,}
 
             # 构建echarts显示的数据结构

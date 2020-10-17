@@ -3,25 +3,26 @@
 
 {% block css %}
 <style>
+    #displayBox {
+        float: left;
+        height: 100%;
+        width: 80%;
+    }
     #topSetBox {
         height: 4%;
         background-color:#404a59;
     }
     
-    #displayBox {
-        height: 96%;
-        width: 100%x;
-    }
-    #displayBox #chartBox {
+    #chartBox {
         float: left;
-        height: 100%;
-        width: 80%;
+        height: 96%;
+        width: 100%;
     }
-    #displayBox #tableBox {
+    #tableBox {
         float: left;
         height: 100%;
         width: 20%;
-        background-color:#404a59;
+        background-color:#a5cae9f3;
     }
 </style>
 {% endblock %}
@@ -32,16 +33,22 @@
 {% endblock %}
 
 
+{% block titleLabels %}
+<span id="errmsg" style="color:red;"></span>
+{% endblock %}
+
+
 {% block content %}
+<div id="displayBox">
     <div id="topSetBox">
-        <button id="btnDataUpdate" type="button" class="btn btn-primary btn-xs">数据更新</button>
+        <button id="btnUpdateData" type="button" class="btn btn-primary btn-xs">数据更新</button>
         <button id="btnReturnGlobal" type="button" class="btn btn-primary btn-xs"><i class="fa fa-reply" aria-hidden="true"></i> 返回全球预览</button>
     </div>
-    <div id="displayBox">
-        <div id="chartBox"></div>
-        <div id="tableBox"></div>
-    </div>
+    <div id="chartBox"></div>
+</div>
+<div id="tableBox"></div>
 {% endblock %}
+
 
 {% block js %}
 <script src="/static/plugins/echarts-4.6.0/echarts.min.js"></script>
@@ -79,15 +86,81 @@
         myChartSetOption(option, myChart);
     }
 
+    function formTable(id, dataRet, location_click=null) {
+        // 动态形成table,分两种
+        // 1、当点击branch的时候不显示单位，(currentIndex改变调用)
+        // 2、当点branch下地区图块的时候显示单位，(点击branch下地区图块的时候调用)
+        var div = document.getElementById(id);
+        var groupIndex = dataRet.setting.groupIndex;
+        var currentIndex = dataRet.setting.currentIndex;
+        var table = '<table class="table table-striped table-hover table-condensed">';
+        if (location_click == null) {
+            // 1、当点击branch的时候不显示单位，(currentIndex改变调用)，分全球与中国
+            table += '<thead><tr><th>序号</th><th>地区</th><th>人数</th></tr></thead><tbody>';
+
+            if (dataRet.setting.mapType == 'china') {
+                len = dataRet.data[groupIndex].China.length;
+                for (var i = 0; i < len; i++) {
+                    table += "<tr><td >" + (i+1) + "</td>";
+                    table += "<td>" + dataRet.data[groupIndex].China[currentIndex].data[i].value[1] + "</td>";
+                    table += "<td>" + dataRet.data[groupIndex].China[currentIndex].data[i].value[0] + "</td></tr>";
+                }
+            } else {
+                len = dataRet.data[groupIndex].world.length;
+                for (var i = 0; i < len; i++) {
+                    table += "<tr><td >" + (i+1) + "</td>";
+                    table += "<td>" + dataRet.data[groupIndex].world[currentIndex].data[i].value[1] + "</td>";
+                    table += "<td>" + dataRet.data[groupIndex].world[currentIndex].data[i].value[0] + "</td></tr>";
+                }
+            }
+            table += "</tbody></table>";
+            
+        } else {
+            // 2、当点branch下地区图块的时候显示单位，(点击branch下地区图块的时候调用)，分全球与中国
+            // location_click 地区名称
+            table += '<thead><tr><th>序号</th><th>地区</th><th>单位</th><th>人数</th></tr></thead><tbody>';
+            if (dataRet.setting.mapType == 'china') {
+                len = dataRet.data[groupIndex].China.length;
+                for (var i = 0; i < len; i++) {
+                    if (dataRet.data[groupIndex].China[currentIndex].data[i].value[1] == location_click) {
+                        var units = dataRet.data[groupIndex].China[currentIndex].data[i].unit;
+                        var j = 0;
+                        for (let key in units) {
+                            table += "<tr><td >" + (j+1) + "</td>";
+                            table += "<td>" + location_click + "</td>";
+                            table += "<td>" + key + "</td>";
+                            table += "<td>" + units[key] + "</td></tr>";
+                            j++;
+                        }
+                    }
+                }
+            } else {
+                len = dataRet.data[groupIndex].world.length;
+                for (var i = 0; i < len; i++) {
+                    if (dataRet.data[groupIndex].world[currentIndex].data[i].value[1] == location_click) {
+                        var units = dataRet.data[groupIndex].world[currentIndex].data[i].unit;
+                        var j = 0;
+                        for (var key in units) {
+                            table += "<tr><td >" + (j+1) + "</td>";
+                            table += "<td>" + location_click + "</td>";
+                            table += "<td>" + key + "</td>";
+                            table += "<td>" + units[key] + "</td></tr>";
+                            j++;
+                        }
+                    }
+                }
+            }
+            table += "</tbody></table>";
+        }
+        div.innerHTML = table;
+    }
 
     /* 以下为：初始化, dataRet.setting为图表设置项，全局变量可改动 */
     var dataRet = {{ dataRet | safe }};
     formMeuns('group_menus', dataRet);
-
-    // dataRet.setting.mapType = 'world';
-    
     var myChart = echarts.init(document.getElementById("chartBox"));
     setMyChart(myChart, dataRet);
+    formTable('tableBox', dataRet);
     
     
     /* 以下为：JS方法，前面一部分是应用于动态生成html的方法，不能用id绑定，后面一部分是id绑定的jquery方法 */
@@ -100,25 +173,61 @@
             dataRet.setting.groupIndex = i;
             dataRet.setting.currentIndex = j;
             setMyChart(myChart, dataRet);
+            formTable('tableBox', dataRet);
         }
 
     }
 
     $(function () {
         myChart.on('click', function (params) {
+            // 点击地图板块
             if (typeof(params.data)=="object"){
-                // console.log(params);
                 if(params.data.name=='China'){
                     dataRet.setting.mapType = 'china';
                     setMyChart(myChart, dataRet);
                 }
+                if (dataRet.setting.currentIndex != 0) {
+                    formTable('tableBox', dataRet, params.data.name);
+                }
             }
         });
+
+        myChart.on('timelinechanged', function (params) {
+            // 改变时间轴
+            dataRet.setting.currentIndex = params.currentIndex;
+            formTable('tableBox', dataRet);
+        });
+
         
         $('#btnReturnGlobal').click(function () {
             // 返回全球预览按钮
             dataRet.setting.mapType = 'world';
             setMyChart(myChart, dataRet);
+        });
+        
+        $('#btnUpdateData').click(function () {
+            // 数据更新
+            toDisplayLoading();
+            $.ajax({
+                url: "{%url 'updateData'%}",
+                type: 'POST',
+                headers: { 'X-CSRFToken': $.cookie('csrftoken') },
+                data: {
+                    'mapType': dataRet.setting.mapType,
+                    'groupIndex': dataRet.setting.groupIndex,
+                    'currentIndex': dataRet.setting.currentIndex,
+                },
+                dataType: 'JSON',
+                success: function (params) {
+                    if (params.status) {
+                        setMyChart(myChart, params.message);
+                        toRemoveLoading();
+                    } else {
+                        $('#errmsg').text(params.message);
+                        toRemoveLoading();
+                    }
+                }
+            })
         });
 
 

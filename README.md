@@ -12,5 +12,7 @@ Excel 注意点：
 	- sheet页名称或者顺序不变了
 
 TODO：
-	- 怎加表格显示单位信息;
+	- 表格显示单位信息bug修复;
 	- 地图上显示信息;
+
+![主页视图](https://github.com/Airseai6/talentMap/raw/master/doc/images/1.png)
