@@ -19,8 +19,12 @@ function activeDataZoomSelect(myChart) {
 }
 
 
-function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
+function formMapOption(data, mapType, title, currentIndex=0, autoPlay=false) {
     /* 构建显示地图的option */
+    var mapLeft = '22%';
+    if (mapType == 'world') {
+        mapLeft = '5%';
+    }
     var option = {
         baseOption: {
             animationDurationUpdate: 1000,
@@ -88,8 +92,8 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
                 }
             },
             grid: {
-                left: '12%',
-                right: '45%',
+                left: '10%',
+                right: '42%',
                 top: '70%',
                 bottom: 20
             },
@@ -102,7 +106,7 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
                     roam: true,//缩放和平移
                     top: '10%',
                     bottom: '20%',
-                    left: '12%',
+                    left: mapLeft,
                     itemStyle: {
                         normal: {
                             areaColor: '#323c48',
@@ -136,7 +140,7 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
                     id: 'pie',
                     type: 'pie',
                     radius: ['8%', '20%'],
-                    center: ['85%', '85%'],
+                    center: ['80%', '82%'],
                     roseType: 'radius',
                     tooltip: {
                         formatter: '{b} {d}%'
@@ -179,7 +183,7 @@ function formMapOption(data, mapType, currentIndex=0, autoPlay=false) {
             barLabelFontSize = 8;
         }
         option.options.push({
-            title: {text: '聚变人才人员分布情况-' + data[i].type},
+            title: {text: title + '分布情况-' + data[i].type},
             visualMap: [{
                 dimension: 0,
                 left: '1%',

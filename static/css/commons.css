@@ -89,6 +89,9 @@ body{
 .div2{
     display: none;cursor:pointer; font-size:13px;
 }
+.pg-body .menus .div2 a{
+    padding: 0px 1px;
+}
 .div2 ul{
     margin:0;padding:0;
 }

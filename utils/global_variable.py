@@ -12,9 +12,9 @@ class const():
         # 原始excel文件位置
         self.excel_dir = os.path.join(settings.BASE_DIR, 'doc')
         # excel文件列表
-        self.excel_groups = ['人才资源库 (聚变).xlsx',]
+        self.excel_groups = ['人才资源库 (聚变).xlsx','人才资源库 (地热).xlsx',]
         # menus列表与excel对应
-        self.menus_groups = ['聚变人才',]
+        self.menus_groups = ['聚变人才','地热人才',]
         # 中国地图的省份，对应echarts中的名称
         self.ChinaProvinces = ['北京','天津','上海','河北','山西','内蒙古','辽宁','吉林','黑龙江','江苏','浙江','安徽','福建','江西','山东','河南','湖北',
         '湖南','广东','广西','海南','四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆','重庆','台湾','香港','澳门',]

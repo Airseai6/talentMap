@@ -7,10 +7,21 @@
         height: 4%;
         background-color:#404a59;
     }
-
+    
     #displayBox {
         height: 96%;
         width: 100%x;
+    }
+    #displayBox #chartBox {
+        float: left;
+        height: 100%;
+        width: 80%;
+    }
+    #displayBox #tableBox {
+        float: left;
+        height: 100%;
+        width: 20%;
+        background-color:#404a59;
     }
 </style>
 {% endblock %}
@@ -26,9 +37,9 @@
         <button id="btnDataUpdate" type="button" class="btn btn-primary btn-xs">数据更新</button>
         <button id="btnReturnGlobal" type="button" class="btn btn-primary btn-xs"><i class="fa fa-reply" aria-hidden="true"></i> 返回全球预览</button>
     </div>
-
     <div id="displayBox">
-
+        <div id="chartBox"></div>
+        <div id="tableBox"></div>
     </div>
 {% endblock %}
 
@@ -43,10 +54,11 @@
         var div = document.getElementById(id);
         var content = '';
         for (var i = 0; i < dataRet.groups.length; i++) {
-            content += '<div class="div1"><a href="#"><i class="fa fa-users" aria-hidden="true"></i> '+dataRet.groups[i]+'</a></div>';
+            content += '<div class="div1"><a onclick="toChangeMenu(this, i='+i+', j=0)">';
+            content += '<i class="fa fa-users" aria-hidden="true"></i> '+dataRet.groups[i]+'</a></div>';
             content += '<div class="div2"><ul>';
             for (var j = 0; j < dataRet.data[i].branchName.length; j++) {
-                content += '<li>'+ dataRet.data[i].branchName[j] +'</li>';
+                content += '<a onclick="toChangeMenu(this, i='+i+', j='+(j+1)+')">'+'<li>'+ dataRet.data[i].branchName[j] +'</li></a>';
             }
             content += '</ul></div>';
         }
@@ -62,26 +74,40 @@
             $("#btnReturnGlobal").show();
             data = dataRet.data[dataRet.setting.groupIndex].China;
         }
-        var option = formMapOption(data, dataRet.setting.mapType, dataRet.setting.currentIndex);
+        var title = dataRet.groups[dataRet.setting.groupIndex];
+        var option = formMapOption(data, dataRet.setting.mapType, title, dataRet.setting.currentIndex);
         myChartSetOption(option, myChart);
     }
+
 
     /* 以下为：初始化, dataRet.setting为图表设置项，全局变量可改动 */
     var dataRet = {{ dataRet | safe }};
     formMeuns('group_menus', dataRet);
 
-    // var mapType = 'world';
-    // var groupIndex = 0;
-    // var currentIndex = 0;
+    // dataRet.setting.mapType = 'world';
     
-    var myChart = echarts.init(document.getElementById("displayBox"));
+    var myChart = echarts.init(document.getElementById("chartBox"));
     setMyChart(myChart, dataRet);
     
+    
+    /* 以下为：JS方法，前面一部分是应用于动态生成html的方法，不能用id绑定，后面一部分是id绑定的jquery方法 */
+    function toChangeMenu(ths, i, j) {
+        // 点击左侧菜单, 通过JS改变右侧内容
+        // i为setting.groupIndex, j为setting.currentIndex
+        if (j == 0 && $(ths).parent(".div1").next(".div2")[0].style.display == 'block'){
+            console.log('收起');
+        } else {
+            dataRet.setting.groupIndex = i;
+            dataRet.setting.currentIndex = j;
+            setMyChart(myChart, dataRet);
+        }
+
+    }
 
     $(function () {
         myChart.on('click', function (params) {
             if (typeof(params.data)=="object"){
-                // console.log(params.data.name);
+                // console.log(params);
                 if(params.data.name=='China'){
                     dataRet.setting.mapType = 'china';
                     setMyChart(myChart, dataRet);
@@ -94,6 +120,8 @@
             dataRet.setting.mapType = 'world';
             setMyChart(myChart, dataRet);
         });
+
+
     });
 
 </script>

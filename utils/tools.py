@@ -7,8 +7,8 @@ class excelReader:
     """ 解析Excel，返回字典 """
     def __init__(self, filename):
         self.filename = filename
-        self.trunk_df = pd.read_excel(self.filename, sheet_name=0)
-        self.branch_df = pd.read_excel(self.filename, sheet_name=1)
+        self.trunk_df = pd.read_excel(self.filename, sheet_name='整体数据')
+        self.branch_df = pd.read_excel(self.filename, sheet_name='目标单位')
 
     def getTrunk(self):
         """
