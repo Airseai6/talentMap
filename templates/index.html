@@ -86,7 +86,7 @@
         myChartSetOption(option, myChart);
     }
 
-    function formTable(id, dataRet, location_click=null) {
+    function formTable(id, dataRet, location_click=null, units=null) {
         // 动态形成table,分两种
         // 1、当点击branch的时候不显示单位，(currentIndex改变调用)
         // 2、当点branch下地区图块的时候显示单位，(点击branch下地区图块的时候调用)
@@ -99,14 +99,14 @@
             table += '<thead><tr><th>序号</th><th>地区</th><th>人数</th></tr></thead><tbody>';
 
             if (dataRet.setting.mapType == 'china') {
-                len = dataRet.data[groupIndex].China.length;
+                len = dataRet.data[groupIndex].China[currentIndex].data.length;
                 for (var i = 0; i < len; i++) {
                     table += "<tr><td >" + (i+1) + "</td>";
                     table += "<td>" + dataRet.data[groupIndex].China[currentIndex].data[i].value[1] + "</td>";
                     table += "<td>" + dataRet.data[groupIndex].China[currentIndex].data[i].value[0] + "</td></tr>";
                 }
             } else {
-                len = dataRet.data[groupIndex].world.length;
+                len = dataRet.data[groupIndex].world[currentIndex].data.length;
                 for (var i = 0; i < len; i++) {
                     table += "<tr><td >" + (i+1) + "</td>";
                     table += "<td>" + dataRet.data[groupIndex].world[currentIndex].data[i].value[1] + "</td>";
@@ -119,36 +119,13 @@
             // 2、当点branch下地区图块的时候显示单位，(点击branch下地区图块的时候调用)，分全球与中国
             // location_click 地区名称
             table += '<thead><tr><th>序号</th><th>地区</th><th>单位</th><th>人数</th></tr></thead><tbody>';
-            if (dataRet.setting.mapType == 'china') {
-                len = dataRet.data[groupIndex].China.length;
-                for (var i = 0; i < len; i++) {
-                    if (dataRet.data[groupIndex].China[currentIndex].data[i].value[1] == location_click) {
-                        var units = dataRet.data[groupIndex].China[currentIndex].data[i].unit;
-                        var j = 0;
-                        for (let key in units) {
-                            table += "<tr><td >" + (j+1) + "</td>";
-                            table += "<td>" + location_click + "</td>";
-                            table += "<td>" + key + "</td>";
-                            table += "<td>" + units[key] + "</td></tr>";
-                            j++;
-                        }
-                    }
-                }
-            } else {
-                len = dataRet.data[groupIndex].world.length;
-                for (var i = 0; i < len; i++) {
-                    if (dataRet.data[groupIndex].world[currentIndex].data[i].value[1] == location_click) {
-                        var units = dataRet.data[groupIndex].world[currentIndex].data[i].unit;
-                        var j = 0;
-                        for (var key in units) {
-                            table += "<tr><td >" + (j+1) + "</td>";
-                            table += "<td>" + location_click + "</td>";
-                            table += "<td>" + key + "</td>";
-                            table += "<td>" + units[key] + "</td></tr>";
-                            j++;
-                        }
-                    }
-                }
+            var j = 0;
+            for (let key in units) {
+                table += "<tr><td >" + (j+1) + "</td>";
+                table += "<td>" + location_click + "</td>";
+                table += "<td>" + key + "</td>";
+                table += "<td>" + units[key] + "</td></tr>";
+                j++;
             }
             table += "</tbody></table>";
         }
@@ -185,9 +162,10 @@
                 if(params.data.name=='China'){
                     dataRet.setting.mapType = 'china';
                     setMyChart(myChart, dataRet);
+                    formTable('tableBox', dataRet);
                 }
                 if (dataRet.setting.currentIndex != 0) {
-                    formTable('tableBox', dataRet, params.data.name);
+                    formTable('tableBox', dataRet, params.data.value[1], params.data.unit);
                 }
             }
         });
