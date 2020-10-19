@@ -25,6 +25,9 @@
         background-color:#a5cae9f3;
         overflow: auto;
     }
+    #tableBox .table-hover>tbody>tr:hover {
+    background-color: #0b7edbf3;
+}
 </style>
 {% endblock %}
 
@@ -182,6 +185,7 @@
             // 返回全球预览按钮
             dataRet.setting.mapType = 'world';
             setMyChart(myChart, dataRet);
+            formTable('tableBox', dataRet);
         });
         
         $('#btnUpdateData').click(function () {

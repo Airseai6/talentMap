@@ -15,7 +15,7 @@
 - TODO：
     - ~~前端地图可以~~
     - ~~前端后端打通~~
-    - 表格显示单位信息bug修复;
+    - ~~表格显示单位信息bug修复~~;
     - 添加位置信息地图上显示信息;
 
 ![主页视图](https://github.com/Airseai6/talentMap/raw/main/doc/images/1.png)
