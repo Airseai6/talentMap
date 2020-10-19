@@ -23,6 +23,7 @@
         height: 100%;
         width: 20%;
         background-color:#a5cae9f3;
+        overflow: auto;
     }
 </style>
 {% endblock %}
@@ -164,7 +165,7 @@
                     setMyChart(myChart, dataRet);
                     formTable('tableBox', dataRet);
                 }
-                if (dataRet.setting.currentIndex != 0) {
+                else if (dataRet.setting.currentIndex != 0) {
                     formTable('tableBox', dataRet, params.data.value[1], params.data.unit);
                 }
             }

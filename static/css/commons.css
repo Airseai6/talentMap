@@ -105,7 +105,7 @@ body{
     right: 0;
     bottom: 0;
     top: 48px;
-    overflow: scroll;
+    /* overflow: scroll; */
     /* overflow: hidden; */
     /* background-color: wheat; */
     z-index: 9;
