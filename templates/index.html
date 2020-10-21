@@ -204,6 +204,7 @@
                 success: function (params) {
                     if (params.status) {
                         setMyChart(myChart, params.message);
+                        formTable('tableBox', dataRet);
                         toRemoveLoading();
                     } else {
                         $('#errmsg').text(params.message);
